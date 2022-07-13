@@ -2,10 +2,13 @@
 <launch>
 
   <!-- Define the csv file path (write only the prefix, the datetime and the csv extension will be added by the program) -->
-  <param name="output_csv_path" value="$(find log_data)/log/rob_pos"/>
+  <param name="output_csv_path" value="$(find log_data)/log/new/move_base_new_"/>
   
   <!-- Start the drone feedback node
-  <node name="feedback" pkg="log_data" type="feedback.py" respawn="true" output="screen" />-->
+  <node name="feedback" pkg="log_data" type="feedback.py" respawn="true" output="screen" />
+  <node name="feedback_updated" pkg="log_data" type="feedback_updated.py" respawn="true" output="screen" />-->
+
   <node name="feedback_new" pkg="log_data" type="feedback_new.py" respawn="true" output="screen" />
+  
 
 </launch>

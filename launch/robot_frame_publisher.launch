@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-
-  <!-- Start the fixed-orientation drone frame publisher node -->
-  <node name="robot_frame_broadcaster" pkg="log_data" type="robot_frame.py" respawn="true" output="screen" />
-
-</launch>
