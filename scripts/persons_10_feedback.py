@@ -40,12 +40,22 @@ pedPosition2 = None
 pedPosition3 = None
 pedPosition4 = None
 pedPosition5 = None
+pedPosition6 = None
+pedPosition7 = None
+pedPosition8 = None
+pedPosition9 = None
+pedPosition10 = None
 
 pedOrientation1 = None
 pedOrientation2 = None
 pedOrientation3 = None
 pedOrientation4 = None
 pedOrientation5 = None
+pedOrientation6 = None
+pedOrientation7 = None
+pedOrientation8 = None
+pedOrientation9 = None
+pedOrientation10 = None
 
 #laser scan variable
 objectScan = None
@@ -80,8 +90,8 @@ def odometry_callback(odometryMsg):
 
 
 def pedestrians_info_callback(pedMsg):
-    global pedPosition1, pedPosition2, pedPosition3, pedPosition4, pedPosition5
-    global pedOrientation1, pedOrientation2, pedOrientation3, pedOrientation4, pedOrientation5
+    global pedPosition1, pedPosition2, pedPosition3, pedPosition4, pedPosition5, pedPosition6, pedPosition7, pedPosition8, pedPosition9, pedPosition10
+    global pedOrientation1, pedOrientation2, pedOrientation3, pedOrientation4, pedOrientation5, pedOrientation6, pedOrientation7, pedOrientation8, pedOrientation9, pedOrientation10
     
     # Process the message only when the previous one has been logged
     if not pedInfoReceived.is_set():
@@ -97,19 +107,30 @@ def pedestrians_info_callback(pedMsg):
 	   pedOrientation4 = pedMsg.agent_states[3].pose.orientation
 	   pedPosition5 = pedMsg.agent_states[4].pose.position
            pedOrientation5 = pedMsg.agent_states[4].pose.orientation
+           pedPosition6 = pedMsg.agent_states[5].pose.position
+	   pedOrientation6 = pedMsg.agent_states[5].pose.orientation
+           pedPosition7 = pedMsg.agent_states[6].pose.position
+	   pedOrientation7 = pedMsg.agent_states[6].pose.orientation
+	   pedPosition8 = pedMsg.agent_states[7].pose.position
+	   pedOrientation8 = pedMsg.agent_states[7].pose.orientation
+	   pedPosition9 = pedMsg.agent_states[8].pose.position
+	   pedOrientation9 = pedMsg.agent_states[8].pose.orientation
+	   pedPosition10 = pedMsg.agent_states[9].pose.position
+           pedOrientation10 = pedMsg.agent_states[9].pose.orientation
 	
         # Set the flag to true
            pedInfoReceived.set()
 
 
-def callback(scanMsg):
+def laser_scan_callback(scanMsg):
     global objectScan
-    
+
+    # len of ranges is 666 - in case of RGBD laser scan
     #print len(msg.ranges) 
-    # 666 - in case of RGBD laser scan
+    
     if not scanReceived.is_set():
-	
- 	objectScan = scanMsg.ranges[360]
+	# laser scan ray from center of robot to the obstacle
+ 	objectScan = scanMsg.ranges[333]
 
         # Set the flag to true
         scanReceived.set()
@@ -143,14 +164,14 @@ def print_feedback():
     print(Style.BRIGHT + "* Rotation about the Z axis: " + str(round(robotAngVel.z, 2)) + Style.RESET_ALL)
     print
     print("The laser scan distance from robot to obstcale(any) in the range [360] is:")
-    print(Style.BRIGHT + str(round(objectScan, 2)) + Style.RESET_ALL)
+    print(Style.BRIGHT + "* " + str(round(objectScan, 2)) + Style.RESET_ALL)
     print
 
 
 def log_feedback():
     global goalTime, robotPosition, robotOrientationDeg, robotLinVel, robotAngVel
-    global pedPosition1, pedPosition2, pedPosition3, pedPosition4, pedPosition5
-    global pedOrientation1, pedOrientation2, pedOrientation3, pedOrientation4, pedOrientation5
+    global pedPosition1, pedPosition2, pedPosition3, pedPosition4, pedPosition5, pedPosition6, pedPosition7, pedPosition8, pedPosition9, pedPosition10
+    global pedOrientation1, pedOrientation2, pedOrientation3, pedOrientation4, pedOrientation5, pedOrientation6, pedOrientation7, pedOrientation8, pedOrientation9, pedOrientation10
     global objectScan
 
     currentTimestamp = [int(time.time())]
@@ -163,9 +184,14 @@ def log_feedback():
     logPed3 = [pedPosition3.x, pedPosition3.y, pedOrientation3.z]   
     logPed4 = [pedPosition4.x, pedPosition4.y, pedOrientation4.z]
     logPed5 = [pedPosition5.x, pedPosition5.y, pedOrientation5.z]
+    logPed6 = [pedPosition6.x, pedPosition6.y, pedOrientation6.z]
+    logPed7 = [pedPosition7.x, pedPosition7.y, pedOrientation7.z]
+    logPed8 = [pedPosition8.x, pedPosition8.y, pedOrientation8.z]   
+    logPed9 = [pedPosition9.x, pedPosition9.y, pedOrientation9.z]
+    logPed10 = [pedPosition10.x, pedPosition10.y, pedOrientation10.z]
     logScan = [objectScan]
 
-    data = currentTimestamp + logGoalTime + logRobotPose + logRobotVelocities + logPed1 + logPed2 + logPed3 + logPed4 + logPed5 + logScan
+    data = currentTimestamp + logGoalTime + logRobotPose + logRobotVelocities + logPed1 + logPed2 + logPed3 + logPed4 + logPed5 + logPed6 + logPed7 + logPed8 + logPed9 + logPed10 + logScan
     outputCsv.writerow(data)
     csvFile.flush()
 
@@ -201,10 +227,10 @@ if __name__ == '__main__':
 
 	try:
 	    
- 	    rospy.init_node('feedback')
+ 	    rospy.init_node('persons_10_feedback')
             rospy.Subscriber('/mobile_base_controller/odom', Odometry, odometry_callback)
             rospy.Subscriber('/pedsim_simulator/simulated_agents', AgentStates, pedestrians_info_callback)      
-            rospy.Subscriber('/scan', LaserScan, callback)
+            rospy.Subscriber('/scan', LaserScan, laser_scan_callback)
 
 	    # Open the log file
 	    csv_path = rospy.get_param("output_csv_path")
@@ -214,7 +240,7 @@ if __name__ == '__main__':
 	    outputCsv = csv.writer(csvFile, delimiter=',', quotechar='"')
 
 	    # Write the header that defines the contents of the log file
-	    header = ["timestamp", "ros_time(in sec)", "robot_pos_x(in meters)", "robot_pos_y(in meters)", "robot_pos_th(in deg)", "robot_lin_vel_x(in m/s)", "robot_ang_vel_z(in deg/s)", "person1_pos_x(in meters)", "person1_pos_y(in meters)", "person1_pos_th(in deg)", "person2_pos_x(in meters)", "person2_pos_y(in meters)", "person2_pos_th(in deg)", "person3_pos_x(in meters)", "person3_pos_y(in meters)", "person3_pos_th(in deg)", "person4_pos_x(in meters)", "person4_pos_y(in meters)", "person4_pos_th(in deg)", "person5_pos_x(in meters)", "person5_pos_y(in meters)", "person5_pos_th(in deg)", "scan"]
+	    header = ["timestamp", "ros_time(in sec)", "robot_pos_x(in meters)", "robot_pos_y(in meters)", "robot_pos_th(in deg)", "robot_lin_vel_x(in m/s)", "robot_ang_vel_z(in deg/s)", "person1_pos_x(in meters)", "person1_pos_y(in meters)", "person1_pos_th(in deg)", "person2_pos_x(in meters)", "person2_pos_y(in meters)", "person2_pos_th(in deg)", "person3_pos_x(in meters)", "person3_pos_y(in meters)", "person3_pos_th(in deg)", "person4_pos_x(in meters)", "person4_pos_y(in meters)", "person4_pos_th(in deg)", "person5_pos_x(in meters)", "person5_pos_y(in meters)", "person5_pos_th(in deg)", "person6_pos_x(in meters)", "person6_pos_y(in meters)", "person6_pos_th(in deg)", "person7_pos_x(in meters)", "person7_pos_y(in meters)", "person7_pos_th(in deg)", "person8_pos_x(in meters)", "person8_pos_y(in meters)", "person8_pos_th(in deg)", "person9_pos_x(in meters)", "person9_pos_y(in meters)", "person9_pos_th(in deg)", "person10_pos_x(in meters)", "person10_pos_y(in meters)", "person10_pos_th(in deg)", "laser scan data"]
 	    outputCsv.writerow(header)
             csvFile.flush()
 		

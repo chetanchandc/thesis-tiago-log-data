@@ -102,14 +102,15 @@ def pedestrians_info_callback(pedMsg):
            pedInfoReceived.set()
 
 
-def callback(scanMsg):
+def laser_scan_callback(scanMsg):
     global objectScan
-    
+
+    # len of ranges is 666 - in case of RGBD laser scan
     #print len(msg.ranges) 
-    # 666 - in case of RGBD laser scan
+   
     if not scanReceived.is_set():
-	
- 	objectScan = scanMsg.ranges[360]
+	# laser scan ray from center of robot to the obstacle
+ 	objectScan = scanMsg.ranges[333]
 
         # Set the flag to true
         scanReceived.set()
@@ -143,7 +144,7 @@ def print_feedback():
     print(Style.BRIGHT + "* Rotation about the Z axis: " + str(round(robotAngVel.z, 2)) + Style.RESET_ALL)
     print
     print("The laser scan distance from robot to obstcale(any) in the range [360] is:")
-    print(Style.BRIGHT + str(round(objectScan, 2)) + Style.RESET_ALL)
+    print(Style.BRIGHT + "* " + str(round(objectScan, 2)) + Style.RESET_ALL)
     print
 
 
@@ -201,10 +202,10 @@ if __name__ == '__main__':
 
 	try:
 	    
- 	    rospy.init_node('feedback')
+ 	    rospy.init_node('persons_5_feedback')
             rospy.Subscriber('/mobile_base_controller/odom', Odometry, odometry_callback)
             rospy.Subscriber('/pedsim_simulator/simulated_agents', AgentStates, pedestrians_info_callback)      
-            rospy.Subscriber('/scan', LaserScan, callback)
+            rospy.Subscriber('/scan', LaserScan, laser_scan_callback)
 
 	    # Open the log file
 	    csv_path = rospy.get_param("output_csv_path")
@@ -214,7 +215,7 @@ if __name__ == '__main__':
 	    outputCsv = csv.writer(csvFile, delimiter=',', quotechar='"')
 
 	    # Write the header that defines the contents of the log file
-	    header = ["timestamp", "ros_time(in sec)", "robot_pos_x(in meters)", "robot_pos_y(in meters)", "robot_pos_th(in deg)", "robot_lin_vel_x(in m/s)", "robot_ang_vel_z(in deg/s)", "person1_pos_x(in meters)", "person1_pos_y(in meters)", "person1_pos_th(in deg)", "person2_pos_x(in meters)", "person2_pos_y(in meters)", "person2_pos_th(in deg)", "person3_pos_x(in meters)", "person3_pos_y(in meters)", "person3_pos_th(in deg)", "person4_pos_x(in meters)", "person4_pos_y(in meters)", "person4_pos_th(in deg)", "person5_pos_x(in meters)", "person5_pos_y(in meters)", "person5_pos_th(in deg)", "scan"]
+	    header = ["timestamp", "ros_time(in sec)", "robot_pos_x(in meters)", "robot_pos_y(in meters)", "robot_pos_th(in deg)", "robot_lin_vel_x(in m/s)", "robot_ang_vel_z(in deg/s)", "person1_pos_x(in meters)", "person1_pos_y(in meters)", "person1_pos_th(in deg)", "person2_pos_x(in meters)", "person2_pos_y(in meters)", "person2_pos_th(in deg)", "person3_pos_x(in meters)", "person3_pos_y(in meters)", "person3_pos_th(in deg)", "person4_pos_x(in meters)", "person4_pos_y(in meters)", "person4_pos_th(in deg)", "person5_pos_x(in meters)", "person5_pos_y(in meters)", "person5_pos_th(in deg)", "laser scan data"]
 	    outputCsv.writerow(header)
             csvFile.flush()
 		

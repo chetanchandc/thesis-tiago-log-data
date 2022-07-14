@@ -52,11 +52,10 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
- add_message_files(
-   FILES
-   ClosestObstacleInfo.msg
+# add_message_files(
+#   FILES
 #   Message2.msg
- )
+# )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -168,10 +167,10 @@ include_directories(
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
-  scripts/closest_obstacle_detection.py
+  scripts/persons_5_feedback.py
+  scripts/persons_10_feedback.py
+  scripts/persons_20_feedback.py
   scripts/feedback.py
-  scripts/feedback_new.py
-  scripts/feedback_updated.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

@@ -1,1 +1,0 @@
-timestamp,ros_time,robot_pos_x,robot_pos_y,robot_yaw_th,robot_lin_vel_x,robot_ang_vel_z,person1_pos_x,person1_pos_y,person1_yaw_th,person2_pos_x,person2_pos_y,person2_yaw_th,person3_pos_x,person3_pos_y,person3_yaw_th,person4_pos_x,person4_pos_y,person4_yaw_th,person5_pos_x,person5_pos_y,person5_yaw_th,scan,distance,distance,distance,distance,distance
