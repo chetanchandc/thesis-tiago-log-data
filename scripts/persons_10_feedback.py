@@ -198,7 +198,7 @@ def log_feedback():
 
 def feedback():
 
-    rate = rospy.Rate(1)
+    rate = rospy.Rate(5)
 
     while not rospy.is_shutdown():
         # Clear the terminal

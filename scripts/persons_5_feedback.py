@@ -143,7 +143,7 @@ def print_feedback():
     print("The current yaw angular velocity (in deg/s) of the robot is:")
     print(Style.BRIGHT + "* Rotation about the Z axis: " + str(round(robotAngVel.z, 2)) + Style.RESET_ALL)
     print
-    print("The laser scan distance from robot to obstcale(any) in the range [360] is:")
+    print("The laser scan distance from robot to obstcale(any) in the range [333] is:")
     print(Style.BRIGHT + "* " + str(round(objectScan, 2)) + Style.RESET_ALL)
     print
 
@@ -173,7 +173,7 @@ def log_feedback():
 
 def feedback():
 
-    rate = rospy.Rate(1)
+    rate = rospy.Rate(5)
 
     while not rospy.is_shutdown():
         # Clear the terminal
