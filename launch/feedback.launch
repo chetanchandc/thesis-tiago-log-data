@@ -5,13 +5,13 @@
   <param name="output_csv_path" value="$(find log_data)/log/human_aware_navigation/2_goals/20_persons/exp1_ha-nav_2g_20p_log_"/>
   <param name="output_csv_path" value="$(find log_data)/log/move_base/2_goals/5_persons/exp1_m-b_2g_5p_log_"/>-->
 
-  <param name="output_csv_path" value="$(find log_data)/log/move_base/2_goals/10_persons/exp10_m-b_2g_10p_log_"/>   
+  <param name="output_csv_path" value="$(find log_data)/log/move_base/2_goals/20_persons/exp6_m-b_2g_20p_log_"/>   
   
   <!-- Start the drone feedback node
   <node name="persons_5_feedback" pkg="log_data" type="persons_5_feedback.py" respawn="true" output="screen" />
   <node name="persons_10_feedback" pkg="log_data" type="persons_10_feedback.py" respawn="true" output="screen" />
   <node name="persons_20_feedback" pkg="log_data" type="persons_20_feedback.py" respawn="true" output="screen" />-->
 
-  <node name="persons_10_feedback" pkg="log_data" type="persons_10_feedback.py" respawn="true" output="screen" />
+  <node name="persons_20_feedback" pkg="log_data" type="persons_20_feedback.py" respawn="true" output="screen" />
 
 </launch>
