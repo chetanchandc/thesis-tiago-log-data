@@ -24,8 +24,10 @@ for path in paths:
         exp_path = os.path.join(path,sub_key)
         results[key][sub_key] = dict()
         results[key][sub_key]['col_names'] = list()
-        results[key][sub_key]['time_requirement_t1'] = list()
-        results[key][sub_key]['time_requirement_t2'] = list()
+        results[key][sub_key]['real_time_requirement_t1'] = list()
+        results[key][sub_key]['real_time_requirement_t2'] = list()
+        results[key][sub_key]['sim_time_requirement_t1'] = list()
+        results[key][sub_key]['sim_time_requirement_t2'] = list()
         results[key][sub_key]['speed_t1'] = list()
         results[key][sub_key]['speed_t2'] = list()
         results[key][sub_key]['acceleration_t1'] = list()
@@ -63,27 +65,35 @@ for path in paths:
                 if cur_row>=size:
                     break
 
-            time_req_target_1 = utility.calculate_time_requirement(first_target_matrix,0)
-            time_req_target_2 = utility.calculate_time_requirement(second_target_matrix,0)
-            #print("Time requirement for first target : {} seconds".format(int(time_req_target_1)))
-            #print("Time requirement for second target : {} seconds".format(int(time_req_target_2)))
+            real_time_req_target_1 = utility.calculate_time_requirement(first_target_matrix,1)
+            real_time_req_target_2 = utility.calculate_time_requirement(second_target_matrix,1)
+            #print("Time requirement for first target : {} seconds".format(int(real_time_req_target_1)))
+            #print("Time requirement for second target : {} seconds".format(int(real_time_req_target_2)))
+
+            sim_time_req_target_1 = utility.calculate_time_requirement(first_target_matrix,0)
+            sim_time_req_target_2 = utility.calculate_time_requirement(second_target_matrix,0)
+            #print("Time requirement for first target : {} seconds".format(int(sim_time_req_target_1)))
+            #print("Time requirement for second target : {} seconds".format(int(sim_time_req_target_2)))
 
             avg_speed_target_1 = utility.compute_average_speed(first_target_matrix,col_names.index(vel_col))
             avg_speed_target_2 = utility.compute_average_speed(second_target_matrix,col_names.index(vel_col))
             #print("Average speed of robot on first target : {} seconds".format(avg_speed_target_1))
             #print("Average speed of robot on second target : {} seconds".format(avg_speed_target_2))
 
-            acceleration_target_1 = utility.compute_acceleration(first_target_matrix,col_names.index(vel_col),time_req_target_1)
-            acceleration_target_2 = utility.compute_acceleration(second_target_matrix,col_names.index(vel_col),time_req_target_2)
-            #print("acceleration of robot on first target : {} seconds".format(avg_speed_target_1/time_req_target_1))
-            #print("acceleration of robot on second target : {} seconds".format(avg_speed_target_2/time_req_target_2))
+            acceleration_target_1 = utility.compute_acceleration(first_target_matrix,col_names.index(vel_col),sim_time_req_target_1)
+            acceleration_target_2 = utility.compute_acceleration(second_target_matrix,col_names.index(vel_col),sim_time_req_target_1)
+            #print("acceleration of robot on first target : {} seconds".format(avg_speed_target_1/sim_time_req_target_1))
+            #print("acceleration of robot on second target : {} seconds".format(avg_speed_target_2/sim_time_req_target_2))
 
             avg_min_distance_target_1 = utility.compute_min_distance(first_target_matrix,col_names,[x_pos_name,y_pos_name])
             avg_min_distance_target_2 = utility.compute_min_distance(second_target_matrix,col_names,[x_pos_name,y_pos_name])
             #print("Average min distance of robot on first target : {}".format(avg_min_distance_target_1))
             #print("Average min distance of robot on second target : {}".format(avg_min_distance_target_2))
-            results[key][sub_key]['time_requirement_t1'].append(time_req_target_1)
-            results[key][sub_key]['time_requirement_t2'].append(time_req_target_2)
+
+            results[key][sub_key]['real_time_requirement_t1'].append(real_time_req_target_1)
+            results[key][sub_key]['real_time_requirement_t2'].append(real_time_req_target_2)
+            results[key][sub_key]['sim_time_requirement_t1'].append(sim_time_req_target_1)
+            results[key][sub_key]['sim_time_requirement_t2'].append(sim_time_req_target_2)
             results[key][sub_key]['speed_t1'].append(avg_speed_target_1)
             results[key][sub_key]['speed_t2'].append(avg_speed_target_2)
             results[key][sub_key]['acceleration_t1'].append(acceleration_target_1)
@@ -124,7 +134,7 @@ for approach,n_person_result in results.items():
                         final_result['max_'+col] = [max_acc]
 
 output_df = pd.DataFrame.from_dict(final_result)
-output_df.to_csv('output.csv')  
+output_df.to_csv('output2.csv')  
 
 
                 
