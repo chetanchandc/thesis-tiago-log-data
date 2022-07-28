@@ -87,6 +87,12 @@ def pedestrians_info_callback(pedMsg):
     if not pedInfoReceived.is_set():
 	    ##### @todo convert the pedestrians angle from radians to degrees
 	    ##### add a LOOP to optimize code for not defining every pedestrian.
+        '''
+        for i in range(5):
+           pedPosition.append(pedMsg.agent_states[i].pose.position)
+           pedOrientation = pedMsg.agent_states[i].pose.orientation
+
+        '''
            pedPosition1 = pedMsg.agent_states[0].pose.position
 	   pedOrientation1 = pedMsg.agent_states[0].pose.orientation
            pedPosition2 = pedMsg.agent_states[1].pose.position
