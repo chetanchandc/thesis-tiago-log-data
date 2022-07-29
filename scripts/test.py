@@ -111,6 +111,7 @@ for approach,n_person_result in results.items():
             if col!='col_names':
                 mean = np.mean(result_list)
                 std = np.std(result_list)
+                #print(result_list)
                 avg_col = 'average_'+col
                 std_col = 'std_'+col
                 if avg_col in final_result.keys():
@@ -124,6 +125,7 @@ for approach,n_person_result in results.items():
                 if col.startswith('acceleration'):
                     rms = np.sqrt(np.mean(np.square(result_list)))
                     max_acc = np.max(result_list)
+                    #print(result_list)
                     if 'rms_'+col in final_result.keys():
                         final_result['rms_'+col].append(rms)
                     else:
@@ -132,9 +134,9 @@ for approach,n_person_result in results.items():
                         final_result['max_'+col].append(max_acc)
                     else:
                         final_result['max_'+col] = [max_acc]
-
+        print(result_list)       
 output_df = pd.DataFrame.from_dict(final_result)
-output_df.to_csv('final_output.csv')  
+output_df.to_csv('final_output1.csv')  
 
 
                 
